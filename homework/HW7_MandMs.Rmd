@@ -66,7 +66,6 @@ population_stats
 ### Task 6: Make three histograms: one each for sample5, sample10 and the original dataset. Include a headline. Use a consistent binwidth.
 
 ```{r}
-# Use the same binwidth for all three plots
 binwidth_value <- 2
 
 ggplot(MMs, aes(x = red)) +
