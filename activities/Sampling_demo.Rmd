@@ -8,9 +8,11 @@ pg_populations |> summarize(
   median = median(`Population 2025`, na.rm = TRUE)
 )
 
+
+```
+
+```{r}
 pg_populations |> 
   ggplot() + 
   geom_histogram(aes(x = `Population 2025`))
-
-
 ```

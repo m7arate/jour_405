@@ -1,61 +1,106 @@
 ---
 title: "HW7_MandMs"
+date: 10/1/2025
 ---
+
 
 In this assignment, you'll be picking up where you left off with the M&Ms activity. You'll load the data and perform some basic statistical analysis. Follow the steps below to complete the assignment.
 
 ### Task 1: Load the tidyverse
+
 ```{r}
 library (tidyverse)
 ```
 
-### Task 2: Load the M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
 
+### Task 2: Load an M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
 ```{r}
 MMs <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv")
 ```
 
-### Task 3: Sample 5 rows of data from the dataset
 
+### Task 3: Sample 5 rows of data from the dataset, and then sample 10 rows, saving each to separate dataframes called sample5 and sample10. Be sure to use set.seed(1234) before you start.
 ```{r}
-set.seed(100)  
-sample_MMs <- sample_n(MMs, 5)
-sample_MMs
+set.seed(1234)  
+sample5 <- sample_n(MMs, 5)
+sample10 <- sample_n(MMs, 10)
 ```
 
-### Task 4: Calculate the mean age and standard deviation of the sample, using either the blue or white number of M&Ms
 
+### Task 4: Calculate the mean, median and standard deviation of red M&Ms from each of the samples.
 ```{r}
-sample_stats <- sample_MMs %>%
+sample5_stats <- sample5 %>%
   summarize(
     mean_red = mean(red, na.rm = TRUE),
-    sd_black = sd(black, na.rm = TRUE)
-  )
-sample_stats
-```
-
-### Task 5: Calculate the mean age and standard deviation of the population, using the same measure as in Task 4
-
-```{r}
-pop_stats <- MMs %>%
-  summarize(
-    mean_red = mean(red, na.rm = TRUE),
+    median_red = median(red, na.rm = TRUE),
     sd_red = sd(red, na.rm = TRUE)
   )
-pop_stats
+
+sample10_stats <- sample10 %>%
+  summarize(
+    mean_red = mean(red, na.rm = TRUE),
+    median_red = median(red, na.rm = TRUE),
+    sd_red = sd(red, na.rm = TRUE)
+  )
+
+sample5_stats
+sample10_stats
 
 ```
 
-### Task 6: Compare the sample and population statistics
 
-Compare the two sets of means and standard deviations. Are they similar?
+### Task 5: Calculate the mean, median and standard deviation of red M&Ms from the population
 
-Answer: The means are not the same at all. Neither are the deviations. This means the sets are different. 
+```{r}
+population_stats <- MMs %>%
+  summarize(
+    mean_red = mean(red, na.rm = TRUE),
+    median_red = median(red, na.rm = TRUE),
+    sd_red = sd(red, na.rm = TRUE)
+  )
 
-### Task 7: Describe the results
+population_stats
 
-Write a few sentences about what you found in the data. What does this tell you about the M&Ms dataset and about the act of random sampling?
+```
 
-Answer: The sample mean and deviations are close to the population values, showing that random samples give a good estimate but aren’t exact.
+### Task 6: Make three histograms: one each for sample5, sample10 and the original dataset. Include a headline. Use a consistent binwidth.
+
+```{r}
+# Use the same binwidth for all three plots
+binwidth_value <- 2
+
+ggplot(MMs, aes(x = red)) +
+  geom_histogram(binwidth = binwidth_value, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Red M&Ms (Population)")
+
+ggplot(sample5, aes(x = red)) +
+  geom_histogram(binwidth = binwidth_value, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Red M&Ms (Sample of 5)")
+
+ggplot(sample10, aes(x = red)) +
+  geom_histogram(binwidth = binwidth_value, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Red M&Ms (Sample of 10)")
+
+```
+
+
+### Task 7: Answer questions
+
+
+Compare the three sets of means, standard deviations and histograms. Which are more helpful to you in understanding the accuracy of the samples?
+
+ANSWER: I am a visual person, so the histograms are the best for helping me understand the samples. 
+
+What does this exercise tell you about the relationship between sample size and estimate accuracy?
+
+ANSWER: Higher sample sizes are more accurate. If we go off just the sample of 5, it looks skewed to the right when in reality it's skewed to the left, the sample of 10 shows that better. 
+
+How does random sampling introduce variation into statistical estimates?
+
+ANSWER: The term random answers that question. Randomness is unpredictable and using it in any situation will create variations, especially in estimates.
+
+If you repeated this process, would the samples always be identical? Why or why not?
+
+ANSWER: No, the samples would always be different since you will always be drawing from a different selection of MMs.
 
 When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
