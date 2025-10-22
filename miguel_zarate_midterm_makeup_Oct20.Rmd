@@ -1,0 +1,159 @@
+# JOUR405: Statistics for Journalists
+## Makeup Midterm Exam - Fall 2025
+
+Name: YOUR NAME HERE
+
+
+# JOUR405: Statistics for Journalists
+## Midterm Exam - Fall 2025
+
+For this exam, you'll analyze several datasets using R and the statistical concepts we've covered in class. Load the tidyverse before beginning, then complete each task. Write your code in the provided blocks and answer the questions in complete sentences.
+
+# Load tidyverse and janitor
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+## Part 1: Restaurant Health Inspections (40 points)
+
+The first dataset contains restaurant health inspection scores from New York state. Load the data from: `https://raw.githubusercontent.com/profrobwells/Guest_Lectures/refs/heads/master/new_york_food_inspection_2025.csv`
+
+The dataset includes the name of the facility, the number of points for critical and non-critical violations.
+
+## Task 1: Load the data and clean the column names**
+```{r}
+scores <- read_csv("https://raw.githubusercontent.com/profrobwells/Guest_Lectures/refs/heads/master/new_york_food_inspection_2025.csv") |> clean_names()
+```
+
+
+## Task 2: Calculate the mean and standard deviation maximum and minimum of the total critical violation scores. Put the results in a new dataframe called "compliance_stats." 
+```{r}
+compliance_stats <- scores |>
+  summarize(mean = mean(total_number_critical_violations, na.rm = TRUE),
+            sd = sd(total_number_critical_violations, na.rm = TRUE),
+            max = max(total_number_critical_violations, na.rm = TRUE),
+            min = min(total_number_critical_violations, na.rm = TRUE)
+            )
+```
+
+# Task 3: Write a two sentence summary describing the results from the analysis of New York State restaurant inspections
+
+**Write answer here**: Generally, most restaurants do not have any violations. There are some outliers who have many violations.
+
+##Task 4: Filter the dataset to just the restaurants with a critical violation. Then group by city and calculate the cities that have restaurants with the most violations
+
+```{r}
+filtered_scores <- scores |>
+  filter(total_number_critical_violations > 0)
+
+totals <- filtered_scores |>  
+  group_by(city) |>
+  summarize( sum(total_number_critical_violations))
+
+  
+
+```
+
+## Task 5: Using the "inspections" dataset, create a histogram of the compliance scores with a vertical line showing the mean.  Include a headline and label the x and y axes.
+```{r}
+filtered_scores |>
+  ggplot() +
+  geom_histogram(aes(x = total_number_critical_violations))
+  geom_smooth(es(x=mean, y=), method="lm")
+  labs(
+    title = "Graph of violations",
+    y = "Number of Violations",
+    x = "Number of Violations"
+  )
+
+```
+
+## Task 6: Write 2-3 sentences interpreting what the standard deviation and histogram tell us about the distribution of compliance scores. What would be newsworthy about this distribution? What's the story here? 
+
+**Write your answer here:** I am cofident I messed this up in rushing but the histogram tells us the data is heavily skewed. Some cities have higher violations than others. 
+
+
+## Part 2: Public Transit Ridership (40 points)
+
+You are investigating public transit ridership in the Washington, D.C. area and want to understand the patterns of daily bus and rail ridership. The dataset contains daily bus and rail ridership totals from WMATA for the past year. Load the data from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/wmata_daily.csv and do the following:
+
+# Task 7: Load the data into a dataframe called "transit"
+
+```{r}
+
+transit <- read.csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/wmata_daily.csv")
+
+```
+
+
+
+# Task 8: Calculate the average bus and rail ridership and standard deviation using summarize() 
+```{r}
+transit |> 
+  summarize(
+    mean_bus = mean(bus),
+    mean_rail = mean(rail),
+    sd_bus = sd(bus),
+    sd_rail = sd(rail)
+  )
+
+```
+
+# Task 9: Take a random sample daily ridership numbers. The number in the sample is up to you, but explain why you chose what you did. 
+```{r}
+sample_100 <- transit |>
+sample_n(100)
+
+```
+
+
+# Task 10: Using your random sample, calculate the means and deviations for bus and rail
+```{r}
+sample_100 |> 
+  summarize(
+    mean_bus = mean(bus),
+    sd_bus = sd(bus),
+    mean_rail = mean(rail),
+    sd_rail = sd(rail)
+  )
+
+```
+
+
+# Task 11: Compare your sample to the statistics for the full transit dataset. Write 2-3 sentences here comparing the two. **Write answer here:** My stats were close but not exact. While I had a sizable sample, my stats were not accurate.
+
+
+# Task 12: Using the transit dataset, use group_by() and summarize(), calculate the means for bus and rail ridership for each weekday. 
+
+
+```{r}
+#your code here
+
+
+```
+
+
+# Task 13: Describe the overall pattern of ridership for bus and rail - which days stand out and why? Are there differences between bus and rail in the standard deviation values? **Write your answer here:**
+
+
+# Part 3: Essay Question (20 points)
+
+#Task 14: Data Analysis Scenario. You receive a tip that local emergency response times have gotten significantly worse over the past year. You obtain monthly data on response times for police, fire and ambulance calls.
+
+Write 3-4 sentences (no code!) explaining:
+1. What statistical measures would you calculate to verify this claim? 
+2. What visualizations would help readers understand the trends? 
+3. What additional context or data would you need to make this a complete story? 
+
+**Write your answer here:** I would use the average over the course of a few months, find the max and the minimum then compare where they lie. If the max ends up being higher towards later months, we have a lead. If the average time is higher in later months we also have a lead. I would use a histogram with a trend line to visualize this. Additonal context needed would be any traffic information, times when responses might be worse, and if the number of emergencies has incresed. 
+
+
+
+### Submission Instructions
+- Save your work frequently
+- Make sure all code blocks run without errors
+- Provide clear explanations for your analytical choices
+- Before submitting, clear your environment and run the entire notebook
+
+Good luck!
