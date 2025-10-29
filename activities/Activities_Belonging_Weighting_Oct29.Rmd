@@ -254,4 +254,4 @@ comparison
 
 2. How might these differences affect reporting on likely voter turnout? **Write your answer here: I think the largest difference in the rarely/never category would likely affect voter turnout.**
 
-3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample? **Write your answer here: These differences exist because of the weighting. The rarely/never group seems to be over represented.**
+3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample? **Write your answer here: These differences exist because of the weighting. The rarely/never group seems to be over represented in the survey.**
