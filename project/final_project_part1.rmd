@@ -1,0 +1,73 @@
+---
+title: "final_project_part1"
+output: html_document
+date: "2025-11-15"
+---
+**Name: Miguel Zarate**
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+md_crime <- read_csv("md_crime2023-2024.csv")
+population <- read_csv("https://raw.githubusercontent.com/wellsdata/Jour405_student_repo_fall_2025/refs/heads/main/project/md_county_pop.csv")
+
+colnames(md_crime)
+```
+
+```{r}
+summary <- data.frame(
+  mean = mean(md_crime$incident_hour, na.rm = TRUE),
+  median = median(md_crime$incident_hour, na.rm = TRUE),
+  sd = sd(md_crime$incident_hour, na.rm = TRUE)
+)
+```
+```{r}
+md_crime %>%
+  ggplot(aes(x = incident_hour)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of incident times.",
+    x = "Hour of the Day (0–23)",
+    y = "Number of Incidents"
+  )
+```
+
+```{r}
+md_crime %>%
+  filter(incident_hour == 0) %>%
+  group_by(offense_category_name) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+```
+```{r}
+md_crime %>%
+  filter(incident_hour == 0) %>%
+  group_by(county_name) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+```
+
+
+**What does it contain and what time period does it cover?**
+  Crime statistics across Maryland. The time period is 2023-2024.
+
+**Which columns will be most important for your analysis?**
+  So far I have looked at incident_hour and offense category name These have the most number that I can use. I have also looked at county_name since a location could gleam information.
+
+**What's missing that you might need or want?**
+  Is there a reason why so many crimes happen at midnight? Is it just a tracking error where if a crime has no time associated with it, it just gets assigned to midnight?
+
+**Select a relevant column and produce basic descriptive statistics on the mean, median, lowest and highest values.**
+  See above.
+
+
+Next, propose a newsworthy hypothesis (or several of them) for your dataset. You'll be looking to find (or eliminate possible story ideas) using the techniques you've learned in this class. You'll start that effort this week by coming up with some theories or questions that you're interested in exploring that can be answered with the dataset you selected.
+
+Hypothesis: Most crime occurs at night, specifically midnight.
+
+**What questions do you have about it or need help answering?**
+  Why does so much crime happen at midnight? 

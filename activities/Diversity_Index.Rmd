@@ -4,7 +4,7 @@ date: "Nov 8, 2025"
 author: "Your Name"
 ---
 
-**Your Name Here**
+**Miguel Zarate**
 
 
 ```{r setup, include=FALSE}
@@ -31,7 +31,7 @@ md_cities <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/he
 View(md_cities)
 ```
 
-**ANSWER HERE**
+**ANSWER HERE**: Baltimore stands out as particularly diverse. 
 
 
 ## Task 2: Calculate Race Percentages
@@ -78,7 +78,7 @@ md_cities <- md_cities |>
 View(md_cities)
 ```
 
-**ANSWER HERE**
+**ANSWER HERE**: Summerfield, and that's because it has a Black population that eclipses the rest of the races.
 
 ## Task 5: Calculate Ethnicity Percentages and Their Squares (3 points)
 
@@ -100,7 +100,7 @@ md_cities <- md_cities |>
 View(md_cities)
 ```
 
-**ANSWER HERE**
+**ANSWER HERE**: Cities with the lowest hisp_prob have one race that is dramatically higher than the rest. 
 
 ## Task 6: Multiply Race and Ethnicity Probabilities
 
@@ -129,10 +129,14 @@ md_cities <- md_cities |>
 View(md_cities)
 ```
 
-**ANSWER HERE**
+**ANSWER HERE**: Lake shore is the least diverse with a massive white population that overtakes the rest. Lake shore is closer to the bay and just outside of Baltimore.
 
 ### Pitch a story (8 points)
 
 Given the data that you've produced here, write a headline and lede of the most interesting story from this exercise, and add below that details on how you would report it out: who you'd talk to and the questions you'd ask. When you describe the Diversity Index values, do so in a similar way to how USA Today did; the raw values themselves won't mean much to readers.
 
-**ANSWER HERE**
+**ANSWER HERE**: The most diverse city in Maryland, Langley Park
+
+Langley park has a nearly equal ratio across all demographics, sitting right at the edge of DC and Prince George's County. 
+
+I would then contact officials in the city as well as any individuals there who might have something to say.
