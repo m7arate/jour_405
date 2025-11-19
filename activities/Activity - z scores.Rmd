@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
  "Baltimore County 911 Overdose Calls Analysis"
-author: **YOUR NAME HERE**
+author: **Miguel Zarate**
 
 
 ```{r setup, include=FALSE}
@@ -84,7 +84,7 @@ summary(daily_calls$call_count)
 
 Let's visualize the time series of daily calls. What patterns do you see? 
 
-**Write your answer here**
+**There are some outliers, but we see a consistent number of calls between 6 and 17**
 
 ```{r daily-calls-plot}
 # Plot daily call volume
@@ -145,7 +145,7 @@ unusual_days |>
 
 Let's visualize these unusual days in the context of the full dataset. How do they differ from your answer on Task 3?
 
-**Write your answer here**
+**Our estimation range was off, 17 was the upper end of normal and 4 was the lower end. There are more unusually high days that unusually low days.**
 
 ```{r plot-unusual-days}
 # Create a clean factor for the plot legend
@@ -216,7 +216,7 @@ ggplot(dow_summary, aes(x = day_of_week, y = avg_calls)) +
 
 We can also calculate z-scores that account for the day of the week pattern. How would you describe the day with the highest z-score without using the term "z-score"?
 
-**Write your answer here**
+**Saturdays saw the highest average number of police calls related to drug overdoses.**
 
 ```{r day-of-week-z-scores}
 # Calculate day-of-week adjusted z-scores
@@ -306,4 +306,4 @@ top_outliers
 
 Based on our z-score analysis, what are some potential angles for reporting? What would your next steps be and what would you tell an editor about your findings?
 
-**Write your answer here**
+**The z-scores show us that there was an alarming number of overdoses on new years. The next steps I would take would be to investigate how this information was sourced and speak with police officers about what those nights are like. I would tell my editor about what I found and that this story is important because it speaks to public safety on holidays.**
