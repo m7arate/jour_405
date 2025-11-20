@@ -39,7 +39,7 @@ schools |>
 
 The scatterplot shows the overall trend of the relationship between the FARMS percentage and the math test scores. The red line represents the linear regression line, which helps us understand the average relationship between the two variables. Based on what you see here, what's the relationship between FARMS percentage and math test scores?
 
-**WRITE YOUR ANSWER HERE**
+**There is a slightly positive correlation between FARMS and math test scores. **
 
 
 ### Task: Linear Regression Model (3 points)
@@ -58,7 +58,7 @@ In the middle, you can see the (Intercept) is 59.57897 and the FARMS coefficient
 
 Based on what you've learned so far, is this model worth using? What does it tell us about the nature of the relationship between FARMS percentage and math scores?
 
-**WRITE ANSWER HERE**
+**It is worth looking into, if there was seemingly no correlation it wouldn't be worth it.**
 
 ### Task: Identifying Schools with Biggest Residuals (2 points)
 
@@ -83,10 +83,10 @@ schools <- schools |>
 ```
 The schools with the biggest positive residuals are performing better than expected, while the schools with the biggest negative residuals are performing worse than expected, based on their FARMS percentage. Look at the absolute values of the residuals; what are the largest differences between the predicted result and the actual math scores?
 
-**WRITE YOUR ANSWER HERE**
+**Most of the largest differences come from schools who are performing worse than expected.**
 
 ## Task: Evaluate the model (3 points)
 
 A school board member has said at a meeting that elementary schools with fewer students on free and reduced price meals do better on standardized math tests. Describe what conclusions you'd draw from this model's results and how it would influence a story pitch about the school board member and math scores.
 
-**WRITE YOUR ANSWER HERE**
+**The model says that this is true. Despite the trend line going upwards, schools with more students on FARMS tend to do worse on standardizes math tests. I would like to note that correlation does not always equal causation, and it more likely comes from the lack of food security at home rather than at school.**
