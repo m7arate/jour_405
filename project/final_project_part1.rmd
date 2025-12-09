@@ -5,12 +5,36 @@ date: "2025-11-15"
 ---
 **Name: Miguel Zarate**
 
+Null hypothesis: Crime incidents are distributed normally across a 24 hour time frame. There is no change based on the hour.
+
+Alternative hypothesis: Crime incidents are not evenly distributed across 24 hours. Some times of the day have higher rates of crime than others. 
+
+**What does it contain and what time period does it cover?**
+  The dataset I'm analyzing contains crime statistics across Maryland. The time period is 2023-2024.
+
+**Which columns will be most important for your analysis?**
+  So far I have looked at incident_hour and offense category name These have the most number that I can use. I have also looked at county_name since a location could gleam information.
+
+**What's missing that you might need or want?**
+  Is there a reason why so many crimes happen at midnight? Is it just a tracking error where if a crime has no time associated with it, it just gets assigned to midnight? Is 00:00 just a placeholder for certain crimes?
+
+**Select a relevant column and produce basic descriptive statistics on the mean, median, lowest and highest values.**
+  See above.
+  
+
+**What questions do you have about it or need help answering?**
+  Why does so much crime happen at midnight? 
+  Do these crimes change depending on the month?
+  Have crime rates been going down?
+  
+  Other notes: If 00:00 is meant to be a placeholder, how can police ensure more accurate statistics reporting?
+
 
 ```{r}
 library(tidyverse)
 library(janitor)
 ```
-
+Creating tables:
 ```{r}
 md_crime <- read_csv("md_crime2023-2024.csv")
 population <- read_csv("https://raw.githubusercontent.com/wellsdata/Jour405_student_repo_fall_2025/refs/heads/main/project/md_county_pop.csv")
@@ -25,6 +49,7 @@ summary <- data.frame(
   sd = sd(md_crime$incident_hour, na.rm = TRUE)
 )
 ```
+Create graphs to visualize times:
 ```{r}
 md_crime %>%
   ggplot(aes(x = incident_hour)) +
@@ -35,7 +60,9 @@ md_crime %>%
     y = "Number of Incidents"
   )
 ```
+The visualization shows there is a large amount of crimes listed at 0 hours (midnight). There's also a spike at noon as well, but the midnight spike is much more drastic.
 
+Seeing which crimes are put on the midnight crime spot:
 ```{r}
 md_crime %>%
   filter(incident_hour == 0) %>%
@@ -43,6 +70,8 @@ md_crime %>%
   summarise(count = n()) %>%
   arrange(desc(count))
 ```
+
+Seeing which areas have high midnight crime rates:
 ```{r}
 md_crime %>%
   filter(incident_hour == 0) %>%
@@ -50,24 +79,34 @@ md_crime %>%
   summarise(count = n()) %>%
   arrange(desc(count))
 ```
+Anova test: do certain crimes occur over different times of day?
+```{r}
+anova_model <- aov(incident_hour ~ offense_category_name, data = md_crime)
+summary(anova_model)
+```
+```{r}
+TukeyHSD(anova_model)
+```
+```{r}
+tuk <- TukeyHSD(aov(incident_hour ~ offense_category_name, data = md_crime))
+
+tuk_df <- as.data.frame(tuk$offense_category_name)
+
+tuk_df$comparison <- rownames(tuk$offense_category_name)
+
+write.csv(tuk_df, "tukey_offense_category.csv", row.names = FALSE)
+
+```
+
+Answer: yes, certain crimes occur much later than others. I think some of the less common crimes are skewing some results. 
 
 
-**What does it contain and what time period does it cover?**
-  Crime statistics across Maryland. The time period is 2023-2024.
+Z-score test: Which hours have unusually high crime volumes. 
+```{r}
+hour_counts <- md_crime %>%
+  count(incident_hour)
 
-**Which columns will be most important for your analysis?**
-  So far I have looked at incident_hour and offense category name These have the most number that I can use. I have also looked at county_name since a location could gleam information.
-
-**What's missing that you might need or want?**
-  Is there a reason why so many crimes happen at midnight? Is it just a tracking error where if a crime has no time associated with it, it just gets assigned to midnight?
-
-**Select a relevant column and produce basic descriptive statistics on the mean, median, lowest and highest values.**
-  See above.
-
-
-Next, propose a newsworthy hypothesis (or several of them) for your dataset. You'll be looking to find (or eliminate possible story ideas) using the techniques you've learned in this class. You'll start that effort this week by coming up with some theories or questions that you're interested in exploring that can be answered with the dataset you selected.
-
-Hypothesis: Most crime occurs at night, specifically midnight.
-
-**What questions do you have about it or need help answering?**
-  Why does so much crime happen at midnight? 
+hour_counts <- hour_counts %>%
+  mutate(z = (n - mean(n)) / sd(n))
+```
+Answer: Midnight is 4 standard deviations from the mean. 
