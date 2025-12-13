@@ -4,6 +4,8 @@ output: html_document
 date: "2025-11-15"
 ---
 **Name: Miguel Zarate**
+**Story pitch: main findings, potential problems, and provide a reporting plan** 
+From my research, the main thing I found was that there was a massive spike at midnight for these crimes. The main problem is that midnight could just be a placeholder time. I have two plans for two scenarios. If there is a genuine spike in crimes at midnight, it would be a good idea to find out the type of those crimes that occur at midnight. 30% are larceny, which may be significant. The other story if midnight is a placeholder for non-specific times, we could report on how many crimes don't have a specific time. There's a huge amount of crimes listed at midnight and it modifies the rest of the data since they don't have specific times. This creates an issue for people who study the data. It also show's how non-specific police recordings are, raising that it's important for data to be accurate on crime reports. One solution we could bring up in the article is if the police recorded the minute as well as the hour, which would allow placeholders to be put at 00:00 exactly.
 
 Null hypothesis: Crime incidents are distributed normally across a 24 hour time frame. There is no change based on the hour.
 
@@ -46,7 +48,9 @@ colnames(md_crime)
 summary <- data.frame(
   mean = mean(md_crime$incident_hour, na.rm = TRUE),
   median = median(md_crime$incident_hour, na.rm = TRUE),
-  sd = sd(md_crime$incident_hour, na.rm = TRUE)
+  sd = sd(md_crime$incident_hour, na.rm = TRUE),
+  max = max(md_crime$incident_hour, na.rm = TRUE),
+  min = min(md_crime$incident_hour, na.rm = TRUE)
 )
 ```
 Create graphs to visualize times:
@@ -60,7 +64,7 @@ md_crime %>%
     y = "Number of Incidents"
   )
 ```
-The visualization shows there is a large amount of crimes listed at 0 hours (midnight). There's also a spike at noon as well, but the midnight spike is much more drastic.
+The visualization shows there is a large amount of crimes listed at 0 hours (midnight). There's also a spike at noon as well, but the midnight spike is much more drastic. 
 
 Seeing which crimes are put on the midnight crime spot:
 ```{r}
@@ -79,11 +83,12 @@ md_crime %>%
   summarise(count = n()) %>%
   arrange(desc(count))
 ```
-Anova test: do certain crimes occur over different times of day?
+Anova test: do certain crimes occur over different times of day? In other words, does average incident hour differ across different times of day?
 ```{r}
 anova_model <- aov(incident_hour ~ offense_category_name, data = md_crime)
 summary(anova_model)
 ```
+F-statistic explanation: The f-stat compares variation in incident times between and within incident categories. 
 ```{r}
 TukeyHSD(anova_model)
 ```
@@ -98,7 +103,7 @@ write.csv(tuk_df, "tukey_offense_category.csv", row.names = FALSE)
 
 ```
 
-Answer: yes, certain crimes occur much later than others. I think some of the less common crimes are skewing some results. 
+Answer: yes, certain crimes occur much later than others. I think some of the less common crimes are skewing some results. This confirms the alternative hypothesis and allows us to reject the null hypothesis. The tukey test shows that certain crimes are more likely to happen during certain times based on the data.
 
 
 Z-score test: Which hours have unusually high crime volumes. 
@@ -109,4 +114,34 @@ hour_counts <- md_crime %>%
 hour_counts <- hour_counts %>%
   mutate(z = (n - mean(n)) / sd(n))
 ```
-Answer: Midnight is 4 standard deviations from the mean. 
+Answer: Midnight is 4 standard deviations from the mean. This confirms the alternative hypothesis.
+
+Listing midnight crimes by type.
+```{r}
+midnight_crime_percent <- md_crime %>%
+  filter(incident_hour == 0) %>%
+  count(offense_category_name) %>%
+  mutate(percent = round(n / sum(n) * 100, 1)) %>%
+  arrange(desc(n))
+
+midnight_crime_percent
+
+```
+
+Finding: Most crimes listed at midnight are theft/larceny.
+
+Creating a pie chart to visualize.
+```{r}
+midnight_crime <- md_crime %>%
+  filter(incident_hour == 0) %>%
+  count(offense_category_name, sort = TRUE)
+
+ggplot(midnight_crime, aes(x = "", y = n, fill = offense_category_name)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(
+    title = "Distribution of Crimes Recorded at Midnight by Offense Type",
+    fill = "Offense Category"
+  ) +
+  theme_void()
+```
